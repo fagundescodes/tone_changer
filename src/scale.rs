@@ -23,12 +23,26 @@ fn get_intervals(scale_type: &ScaleType) -> Vec<i32> {
     }
 }
 
-fn get_scale_notes() {
+pub fn get_scale_notes(tonic: &str, scale_type: ScaleType) -> Option<Vec<&str>> {
+    let tonic_index = CHROMATIC_SCALE.iter().position(|&note| note == tonic)?;
+    let intervals = get_intervals(&scale_type);
 
-    let tonic = CHROMATIC_SCALE;
+    let notes: Vec<&str> = intervals
+        .into_iter()
+        .map(|interval| {
+            let note_index = (tonic_index as i32 + interval) % 12;
+            let note_index = if note_index >= 0 {
+                note_index
+            } else {
+                note_index + 12
+            };
+            CHROMATIC_SCALE[note_index as usize]
+        })
+        .collect();
 
+    Some(notes)
 }
 
-pub struct Scale {}
+// pub struct Scale {}
 
 // (T-T-ST-T-T-T-ST)

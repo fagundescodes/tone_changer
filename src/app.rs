@@ -1,27 +1,15 @@
+use crate::scale::{ScaleType, get_scale_notes};
 use std::io::stdin;
 
 pub fn app() {
-    // let notes = [
-    //     "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
-    // ];
-
-    let notes = ["C", "D", "E", "F", "G", "A", "B"];
-
     println!("Insira o tom desejado: ");
     let mut key = String::new();
     stdin().read_line(&mut key).expect("Erro ao ler entrada");
 
     let key = key.trim();
 
-    if let Some(pos) = notes.iter().position(|&nota| nota == key) {
-        let escala_maior: Vec<&str> = notes
-            .iter()
-            .cycle()
-            .skip(pos)
-            .take(notes.len())
-            .copied()
-            .collect();
-
+    if let Some(notes) = get_scale_notes(key, ScaleType::Major) {
+        let escala_maior: Vec<&str> = notes;
         println!("Notas na escala de {:?} maior: {:?}", key, escala_maior);
 
         let mut acordes: Vec<String> = escala_maior.iter().map(|&s| s.to_string()).collect();
